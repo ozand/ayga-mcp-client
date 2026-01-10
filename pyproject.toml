@@ -34,10 +34,10 @@ dev = [
 ayga-mcp-client = "ayga_mcp_client.__main__:main"
 
 [project.urls]
-Homepage = "https://github.com/ozand/redis-mcp-client"
+Homepage = "https://github.com/ozand/ayga-mcp-client"
 Documentation = "https://redis.ayga.tech/docs"
-Repository = "https://github.com/ozand/redis-mcp-client"
-Issues = "https://github.com/ozand/redis-mcp-client/issues"
+Repository = "https://github.com/ozand/ayga-mcp-client"
+Issues = "https://github.com/ozand/ayga-mcp-client/issues"
 
 [build-system]
 requires = ["setuptools>=61.0,<75.0", "wheel"]

@@ -75,8 +75,8 @@ Get credentials: support@ayga.tech or create account at https://redis.ayga.tech
 ## Development
 
 ```bash
-git clone https://github.com/ozand/redis-mcp-client.git
-cd redis-mcp-client
+git clone https://github.com/ozand/ayga-mcp-client.git
+cd ayga-mcp-client
 pip install -e ".[dev]"
 
 # Run tests
@@ -93,5 +93,5 @@ MIT License - see [LICENSE](LICENSE)
 ## Links
 
 - [Redis API Documentation](https://redis.ayga.tech/docs)
-- [GitHub Repository](https://github.com/ozand/redis-mcp-client)
-- [Report Issues](https://github.com/ozand/redis-mcp-client/issues)
+- [GitHub Repository](https://github.com/ozand/ayga-mcp-client)
+- [Report Issues](https://github.com/ozand/ayga-mcp-client/issues)
