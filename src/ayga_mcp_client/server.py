@@ -34,7 +34,7 @@ def create_mcp_server(
 ) -> Server:
     """Create MCP server with Redis API integration."""
     
-    server = Server("redis-mcp-client")
+    server = Server("ayga-mcp-client")
     client = RedisAPIClient(
         base_url=api_url,
         username=username,

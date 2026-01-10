@@ -1,4 +1,4 @@
-"""CLI entrypoint for redis-mcp-client."""
+"""CLI entrypoint for ayga-mcp-client."""
 
 import os
 import argparse

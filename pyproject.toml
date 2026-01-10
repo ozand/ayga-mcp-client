@@ -1,5 +1,5 @@
 [project]
-name = "redis-mcp-client"
+name = "ayga-mcp-client"
 version = "1.0.0"
 description = "MCP server for Redis API with 21+ AI parsers (Perplexity, ChatGPT, Claude, etc.)"
 readme = "README.md"
@@ -10,7 +10,6 @@ keywords = ["mcp", "redis", "ai", "parsers", "claude", "copilot", "perplexity", 
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Topic :: Software Development :: Libraries",
@@ -32,7 +31,7 @@ dev = [
 ]
 
 [project.scripts]
-redis-mcp-client = "redis_mcp_client.__main__:main"
+ayga-mcp-client = "ayga_mcp_client.__main__:main"
 
 [project.urls]
 Homepage = "https://github.com/ozand/redis-mcp-client"
@@ -41,11 +40,12 @@ Repository = "https://github.com/ozand/redis-mcp-client"
 Issues = "https://github.com/ozand/redis-mcp-client/issues"
 
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=61.0,<75.0", "wheel"]
+build-backend = "setuptools.build_meta"
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/redis_mcp_client"]
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["ayga_mcp_client*"]
 
 [tool.ruff]
 line-length = 100

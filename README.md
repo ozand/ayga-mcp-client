@@ -1,14 +1,14 @@
-# redis-mcp-client
+# ayga-mcp-client
 
 MCP server for Redis API with 21+ AI parsers.
 
 <!-- MCP Registry identifier -->
-mcp-name: io.github.ozand/redis-mcp-client
+mcp-name: io.github.ozand/ayga-mcp-client
 
 ## Quick Start
 
 ```bash
-pip install redis-mcp-client
+pip install ayga-mcp-client
 ```
 
 ### Claude Desktop
@@ -19,7 +19,7 @@ Add to `~/.config/Claude/claude_desktop_config.json` (Linux/macOS) or `%APPDATA%
 {
   "mcpServers": {
     "redis-api": {
-      "command": "redis-mcp-client",
+      "command": "ayga-mcp-client",
       "args": ["--username", "YOUR_USERNAME", "--password", "YOUR_PASSWORD"]
     }
   }
@@ -34,7 +34,7 @@ Add to `.vscode/mcp.json`:
 {
   "servers": {
     "redis-api": {
-      "command": "redis-mcp-client",
+      "command": "ayga-mcp-client",
       "args": ["--username", "YOUR_USERNAME", "--password", "YOUR_PASSWORD"]
     }
   }
@@ -83,7 +83,7 @@ pip install -e ".[dev]"
 pytest
 
 # Run locally
-python -m redis_mcp_client --username USER --password PASS
+python -m ayga_mcp_client --username USER --password PASS
 ```
 
 ## License
