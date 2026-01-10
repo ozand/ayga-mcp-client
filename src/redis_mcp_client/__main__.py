@@ -1,44 +1,47 @@
 """CLI entrypoint for redis-mcp-client."""
 
+import os
 import argparse
 import asyncio
 
-from .server import create_server
+from .server import run_stdio_server
 
 
 def main():
-    """Main CLI entrypoint."""
+    """Main CLI entry point."""
     parser = argparse.ArgumentParser(
         description="MCP Server for Redis API with 21+ AI parsers"
     )
     parser.add_argument(
         "--api-url",
-        help="Redis API URL (default: from REDIS_API_URL env or https://redis.ayga.tech)",
+        default=os.environ.get("REDIS_API_URL", "https://redis.ayga.tech"),
+        help="Redis API URL (default: https://redis.ayga.tech)",
     )
     parser.add_argument(
         "--username",
-        help="Username for authentication (or use REDIS_USERNAME env)",
+        default=os.environ.get("REDIS_USERNAME"),
+        help="Username for authentication",
     )
     parser.add_argument(
         "--password",
-        help="Password for authentication (or use REDIS_PASSWORD env)",
+        default=os.environ.get("REDIS_PASSWORD"),
+        help="Password for authentication",
     )
     parser.add_argument(
         "--api-key",
-        help="API key for authentication (or use REDIS_API_KEY env)",
+        default=os.environ.get("REDIS_API_KEY"),
+        help="API key for authentication (alternative to username/password)",
     )
     
     args = parser.parse_args()
     
-    # Create and run server
-    server = create_server(
+    # Run MCP server
+    asyncio.run(run_stdio_server(
         api_url=args.api_url,
         username=args.username,
         password=args.password,
         api_key=args.api_key,
-    )
-    
-    asyncio.run(server.run())
+    ))
 
 
 if __name__ == "__main__":

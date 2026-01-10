@@ -1,4 +1,4 @@
-"""API client module."""
+"""API client package."""
 
 from .client import RedisAPIClient
 

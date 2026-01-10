@@ -8,24 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.0] - 2026-01-10
 
 ### Added
-- Initial release
+- Initial release of redis-mcp-client
 - MCP server with stdio transport
-- Support for 21+ AI parsers:
-  - Perplexity AI, ChatGPT, Claude, Gemini, Copilot, Grok, DeepSeek
-  - Google Search, Bing, DuckDuckGo
-  - YouTube Search and Video Info
-  - Reddit Posts, Comments, Post Info
-  - Telegram Messages
-  - Bing/Google/DeepL/Yandex Translation
-  - HTTP Fetcher
-- Redis operations (get/set)
-- Metadata tools (list parsers, get info, health check)
+- 11+ AI parser tools (Perplexity, ChatGPT, Claude, Gemini, etc.)
+- HTTP client for Redis API
 - Authentication via username/password or API key
-- Progressive backoff polling for async results
-- GitHub Actions for CI/CD
-- PyPI publishing workflow
+- Progressive backoff for task polling
+- Metadata tools (list_parsers, get_parser_info, health_check)
+- CLI entrypoint: `redis-mcp-client`
+- Support for Claude Desktop, VS Code Copilot, Cursor
 
-### Security
-- JWT token-based authentication
-- API key support
-- Environment variable configuration
+### Documentation
+- README with quick start guide
+- MCP Registry identifier
+- Examples for Claude Desktop and VS Code

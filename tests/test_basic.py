@@ -1,28 +1,34 @@
 """Basic tests for redis-mcp-client."""
 
 import pytest
-from redis_mcp_client.api.client import RedisAPIClient
+from redis_mcp_client import create_mcp_server, RedisAPIClient
 
 
-@pytest.fixture
-def client():
-    """Create test client."""
-    return RedisAPIClient(
+def test_create_server():
+    """Test server creation."""
+    server = create_mcp_server(
+        api_url="https://redis.ayga.tech",
+        username="test",
+        password="test",
+    )
+    assert server is not None
+    assert server.name == "redis-mcp-client"
+
+
+def test_client_creation():
+    """Test API client creation."""
+    client = RedisAPIClient(
         base_url="https://redis.ayga.tech",
         username="test",
         password="test",
     )
-
-
-def test_client_initialization(client):
-    """Test client initializes correctly."""
     assert client.base_url == "https://redis.ayga.tech"
     assert client.username == "test"
-    assert client.password == "test"
 
 
 @pytest.mark.asyncio
-async def test_health_check_url():
-    """Test health check URL construction."""
-    client = RedisAPIClient(base_url="https://redis.ayga.tech")
-    assert client.base_url == "https://redis.ayga.tech"
+async def test_client_close():
+    """Test client cleanup."""
+    client = RedisAPIClient()
+    await client.close()
+    # Should not raise
