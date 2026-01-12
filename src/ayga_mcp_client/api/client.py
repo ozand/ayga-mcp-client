@@ -81,34 +81,168 @@ class RedisAPIClient:
         return response.json()
     
     async def submit_parser_task(self, parser_id: str, query: str, options: Optional[Dict] = None) -> Dict[str, Any]:
-        """Submit parser task."""
-        client = await self._get_client()
-        payload = {"query": query}
-        if options:
-            payload["options"] = options
+        """Submit parser task via Redis queue.
         
+        Args:
+            parser_id: Parser ID (e.g., 'perplexity', 'chatgpt')
+            query: Query string
+            options: Optional parser options
+            
+        Returns:
+            Dict with 'task_id' key
+        """
+        import uuid
+        import json as stdlib_json
+        
+        client = await self._get_client()
+        
+        # Generate task ID
+        task_id = str(uuid.uuid4())
+        
+        # Map parser_id to A-Parser format (all 21 parsers)
+        parser_map = {
+            # FreeAI Category
+            "perplexity": "FreeAI::Perplexity",
+            "googleai": "FreeAI::GoogleAI",
+            "chatgpt": "FreeAI::ChatGPT",
+            "kimi": "FreeAI::Kimi",
+            "deepai": "FreeAI::DeepAI",
+            "copilot": "FreeAI::Copilot",
+            
+            # YouTube Category
+            "youtube_video": "SE::YouTube::Video",
+            "youtube_search": "SE::YouTube",
+            "youtube_suggest": "SE::YouTube::Suggest",
+            "youtube_channel_videos": "JS::Example::Youtube::Channel::Videos",
+            "youtube_channel_about": "Net::HTTP",
+            "youtube_comments": "JS::Example::Youtube::Comments",
+            
+            # Social Media Category
+            "telegram_group": "Telegram::GroupScraper",
+            "reddit_posts": "Reddit::Posts",
+            "reddit_post_info": "Reddit::PostInfo",
+            "reddit_comments": "Reddit::Comments",
+            
+            # Translation Category
+            "google_translate": "SE::Google::Translate",
+            "deepl_translate": "DeepL::Translator",
+            "bing_translate": "SE::Bing::Translator",
+            "yandex_translate": "SE::Yandex::Translate",
+            
+            # Net Category
+            "http": "Net::HTTP",
+        }
+        
+        aparser_name = parser_map.get(parser_id, f"FreeAI::{parser_id.title()}")
+        
+        # Extract preset and other options
+        preset = options.get("preset", "default") if options else "default"
+        
+        # Build options dict for A-Parser (5th element in task array)
+        aparser_options = {}
+        if options:
+            # Language parameters (for Translation parsers)
+            if "from_language" in options:
+                aparser_options["fromLanguage"] = options["from_language"]
+            if "to_language" in options:
+                aparser_options["toLanguage"] = options["to_language"]
+            
+            # Pagination parameters
+            if "pages_count" in options:
+                aparser_options["pagesCount"] = options["pages_count"]
+            if "max_comments_count" in options:
+                aparser_options["maxCommentsCount"] = options["max_comments_count"]
+            if "max_empty_posts" in options:
+                aparser_options["maxEmptyPosts"] = options["max_empty_posts"]
+            
+            # YouTube-specific parameters
+            if "interface_language" in options:
+                aparser_options["interfaceLanguage"] = options["interface_language"]
+            if "subtitles_language" in options:
+                aparser_options["subtitlesLanguage"] = options["subtitles_language"]
+            if "comments_pages" in options:
+                aparser_options["commentsPages"] = options["comments_pages"]
+            if "sort" in options:
+                aparser_options["sort"] = options["sort"]
+        
+        # A-Parser task format: [taskId, parser, preset, query, options, {}]
+        task_data = [task_id, aparser_name, preset, query, aparser_options, {}]
+        task_json = stdlib_json.dumps(task_data)
+        
+        # Submit to Redis list via structures API
+        queue_key = "aparser_redis_api"
         response = await client.post(
-            f"{self.base_url}/parsers/{parser_id}/execute",
-            json=payload,
+            f"{self.base_url}/structures/list/{queue_key}/lpush",
+            json={"value": task_json},
             headers={"Authorization": f"Bearer {self._token}"},
         )
         response.raise_for_status()
-        return response.json()
+        
+        return {"task_id": task_id}
     
     async def get_task_result(self, task_id: str) -> Optional[Dict[str, Any]]:
-        """Get task result if ready."""
+        """Get task result from Redis KV.
+        
+        Args:
+            task_id: Task ID from submit_parser_task
+            
+        Returns:
+            Parsed result dict if available, None if not ready yet
+        """
+        import json as stdlib_json
+        
         client = await self._get_client()
+        result_key = f"aparser_redis_api:{task_id}"
+        
         response = await client.get(
-            f"{self.base_url}/results/{task_id}",
+            f"{self.base_url}/kv/{result_key}",
             headers={"Authorization": f"Bearer {self._token}"},
         )
         
-        if response.status_code == 200:
-            return response.json()
-        elif response.status_code == 404:
+        if response.status_code == 404:
+            # Task not ready yet
             return None
-        else:
-            response.raise_for_status()
+        
+        response.raise_for_status()
+        
+        # Parse result (comes as string value from Redis)
+        result_json = response.json()
+        if not result_json or "value" not in result_json:
+            return None
+            
+        # Parse value string
+        try:
+            result_data = stdlib_json.loads(result_json["value"])
+            
+            # Check if it's A-Parser array format: [taskId, status, errorCode, errorMsg, data, ...]
+            if isinstance(result_data, list) and len(result_data) >= 5:
+                task_id_ret, status, error_code, error_msg, data, *rest = result_data
+                
+                # Check for errors
+                if error_code:
+                    raise ValueError(f"Parser error {error_code}: {error_msg}")
+                
+                if status != "success":
+                    return None  # Still processing
+                
+                # Return parsed data
+                return {"data": data, "task_id": task_id_ret}
+            
+            # Otherwise, it's already a dict (new API format)
+            elif isinstance(result_data, dict):
+                # Check for success
+                if result_data.get("success") == 1:
+                    return {"data": result_data, "task_id": task_id}
+                elif result_data.get("error"):
+                    raise ValueError(f"Parser error: {result_data.get('error')}")
+                else:
+                    return None  # Still processing
+            
+            else:
+                raise ValueError(f"Unexpected result format: {type(result_data)}")
+            
+        except (stdlib_json.JSONDecodeError, ValueError) as e:
+            raise ValueError(f"Failed to parse result: {e}")
     
     async def wait_for_result(
         self,

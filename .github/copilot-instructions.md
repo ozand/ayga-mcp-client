@@ -139,15 +139,44 @@ Only handle MCP protocol + HTTP client to API
 ## Authentication Flow
 
 ```python
-# 1. User provides credentials via CLI args or env vars
-ayga-mcp-client --username USER --password PASS
+# 1. User provides API key via env var
+REDIS_API_KEY="your_key_here" python -m ayga_mcp_client
 
-# 2. Client authenticates on first API call
-client = RedisAPIClient(username="USER", password="PASS")
-token = await client._login()  # Returns JWT
+# 2. Client exchanges API key for JWT on first request
+client = RedisAPIClient(api_key="your_key_here")
+token = await client._exchange_api_key()  # POST /auth/exchange
 
 # 3. All subsequent calls use JWT
 headers = {"Authorization": f"Bearer {token}"}
+```
+
+### API Endpoints (v1.0.1+)
+
+**Authentication:**
+```python
+POST /auth/exchange
+Headers: {"X-API-Key": "your_api_key"}
+Response: {"access_token": "jwt_token", "token_type": "bearer"}
+```
+
+**Submit Parser Task:**
+```python
+POST /structures/list/aparser_redis_api/lpush
+Headers: {"Authorization": "Bearer jwt_token"}
+Body: {
+    "value": "[taskId, parser, preset, query, {}, {}]"
+}
+Response: {"task_id": "uuid"}
+```
+
+**Get Task Result:**
+```python
+GET /kv/aparser_redis_api:{task_id}
+Headers: {"Authorization": "Bearer jwt_token"}
+Response: {
+    "key": "aparser_redis_api:uuid",
+    "value": "{\"success\":1,\"info\":{...},\"sources\":[...]}"
+}
 ```
 
 ## Error Handling
@@ -165,6 +194,31 @@ async def call_tool(name: str, arguments: dict) -> list[TextContent]:
 ```
 
 ## Adding New Parser Tools
+
+### Current Parsers (11 total)
+
+```python
+PARSERS = [
+    # AI Chat (7)
+    {"id": "perplexity", "name": "Perplexity AI", "description": "AI-powered search with sources"},
+    {"id": "chatgpt", "name": "ChatGPT", "description": "ChatGPT with web search"},
+    {"id": "claude", "name": "Claude AI", "description": "Anthropic Claude assistant"},
+    {"id": "gemini", "name": "Google Gemini", "description": "Google Gemini AI"},
+    {"id": "copilot", "name": "Microsoft Copilot", "description": "Microsoft Copilot search"},
+    {"id": "grok", "name": "Grok AI", "description": "xAI Grok assistant"},
+    {"id": "deepseek", "name": "DeepSeek", "description": "DeepSeek AI assistant"},
+    
+    # Search Engines (3)
+    {"id": "google_search", "name": "Google Search", "description": "Google web search"},
+    {"id": "bing_search", "name": "Bing Search", "description": "Bing web search"},
+    {"id": "duckduckgo", "name": "DuckDuckGo", "description": "DuckDuckGo search"},
+    
+    # Social Media (1)
+    {"id": "youtube_search", "name": "YouTube Search", "description": "Search YouTube videos"},
+]
+```
+
+### To Add a New Parser:
 
 1. Add to `PARSERS` list in `server.py`:
 ```python
@@ -213,6 +267,36 @@ PARSERS = [
 
 1. Check `DEVELOPMENT.md` for detailed context
 2. Run tests: `python tests/test_basic.py`
-3. Test locally: `pip install -e .` then `ayga-mcp-client --help`
+3. Test locally: `pip install -e .` then test via Python
 4. Read official MCP docs: https://modelcontextprotocol.io/
 5. Check redis_wrapper API docs: https://redis.ayga.tech/docs
+
+## Example Usage
+
+### Test Parser Execution
+```python
+import asyncio
+from ayga_mcp_client.api.client import RedisAPIClient
+
+async def test():
+    client = RedisAPIClient(api_key="your_api_key")
+    
+    # Submit task
+    task = await client.submit_parser_task("perplexity", "What is AI?")
+    print(f"Task ID: {task['task_id']}")
+    
+    # Wait for result
+    result = await client.wait_for_result(task['task_id'], timeout=60)
+    print(f"Result: {result['data']}")
+    
+    await client.close()
+
+asyncio.run(test())
+```
+
+### Use in Claude Desktop/VS Code
+```
+@redis-api search_perplexity query="latest AI trends 2025" timeout=90
+@redis-api search_chatgpt query="explain quantum computing"
+@redis-api list_parsers
+```
