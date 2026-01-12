@@ -1,6 +1,8 @@
-# Update Your VS Code MCP Configuration
+# MCP Configuration for ayga-mcp-client v1.3.0
 
-**Action Required:** Rename MCP server from `"redis-api"` to `"ayga-mcp-client"` for consistency.
+**Current Version:** v1.3.0 with 39 parsers across 9 categories.
+
+## Recommended Configuration
 
 ## Location
 
@@ -42,12 +44,17 @@
 }
 ```
 
-## What Changes
+## Usage
 
-1. Server name: `"redis-api"` → `"ayga-mcp-client"`
-2. Usage in chat: `@redis-api` → `@ayga-mcp-client`
+Once configured, use tools in chat:
 
-## Why This Change?
+```
+@ayga search_perplexity query="AI trends 2026"
+@ayga parse_instagram_profile query="username"
+@ayga get_google_trends query="artificial intelligence"
+```
+
+## Why ayga?
 
 - Package name is `ayga-mcp-client` (not redis-related)
 - Avoids confusion with `redis-mcp-server` (different tool in redis_wrapper)

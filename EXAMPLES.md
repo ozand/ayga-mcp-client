@@ -1,12 +1,17 @@
 # ayga-mcp-client Examples
 
-This document provides detailed examples of all available tools, their request formats, and response structures.
+This document provides detailed examples of all 39 available parsers, their request formats, and response structures.
 
 ## Table of Contents
 
 - [AI Chat Parsers](#ai-chat-parsers)
 - [Search Engines](#search-engines)
 - [Social Media](#social-media)
+- [Content Extraction](#content-extraction-parsers)
+- [Analytics](#analytics-parser)
+- [Visual Content](#visual-content-parser)
+- [Translation Services](#translation-services)
+- [YouTube Parsers](#youtube-parsers)
 - [Metadata Tools](#metadata-tools)
 - [Error Handling](#error-handling)
 - [Real-World Use Cases](#real-world-use-cases)
@@ -849,6 +854,407 @@ async def safe_query(parser: str, query: str):
     await client.close()
     return result
 ```
+
+---
+
+## Content Extraction Parsers
+
+### parse_article_extractor
+
+Extract clean article content using Mozilla Readability algorithm.
+
+**Request:**
+```json
+{
+  "query": "https://example.com/article/ai-advances-2026",
+  "timeout": 60
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "title": "Major AI Advances in 2026",
+    "content": "<article>Full HTML content of the article...</article>",
+    "textContent": "Plain text version without HTML tags...",
+    "length": 4523,
+    "excerpt": "Brief description or first paragraph...",
+    "byline": "John Doe",
+    "siteName": "Tech News Daily"
+  }
+}
+```
+
+**Use Cases:**
+- Content aggregation and archiving
+- Research data collection
+- Article summarization pipelines
+- Clean reading experience extraction
+
+### parse_text_extractor
+
+High-speed text extraction with automatic HTML cleaning (2000 queries/min).
+
+**Request:**
+```json
+{
+  "query": "https://example.com/documentation",
+  "timeout": 30
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "text": "Extracted clean text without HTML tags...",
+    "pages": [
+      {"url": "page1", "text": "..."},
+      {"url": "page2", "text": "..."}
+    ]
+  }
+}
+```
+
+**Features:**
+- Multi-page parsing
+- CloudFlare bypass
+- Minimum text length filtering
+- Automatic HTML tag removal
+
+---
+
+## Social Media - Instagram Parsers
+
+### parse_instagram_profile
+
+Parse Instagram profile data including posts, followers, and biography.
+
+**Request:**
+```json
+{
+  "query": "username",
+  "timeout": 120
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "username": "username",
+    "full_name": "Full Name",
+    "biography": "Bio text...",
+    "website": "https://example.com",
+    "posts_count": 1234,
+    "followers_count": 50000,
+    "following_count": 500,
+    "profile_pic_url": "https://...",
+    "is_business": false,
+    "is_private": false,
+    "is_verified": true,
+    "posts": [
+      {
+        "id": "post_id",
+        "caption": "Post caption...",
+        "likes": 5000,
+        "comments": 250
+      }
+    ]
+  }
+}
+```
+
+**Note:** Requires authentication cookie for private profiles.
+
+### parse_instagram_post
+
+Parse individual Instagram post with comments (up to 1200).
+
+**Request:**
+```json
+{
+  "query": "https://www.instagram.com/p/POST_ID/",
+  "timeout": 120
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "type": "photo",
+    "caption": "Post caption text",
+    "created_at": 1705017600,
+    "likes_count": 10500,
+    "comments_count": 450,
+    "video_url": null,
+    "comments": [
+      {
+        "user": "username",
+        "text": "Comment text",
+        "likes": 25,
+        "timestamp": 1705020000
+      }
+    ]
+  }
+}
+```
+
+### parse_instagram_tag
+
+Parse Instagram posts by hashtag.
+
+**Request:**
+```json
+{
+  "query": "travel",
+  "timeout": 120
+}
+```
+
+**Note:** Requires authentication cookie.
+
+### parse_instagram_geo
+
+Parse Instagram posts by location/geotag.
+
+**Request:**
+```json
+{
+  "query": "https://www.instagram.com/explore/locations/123456/",
+  "timeout": 120
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "location_id": "123456",
+    "name": "Location Name",
+    "phone": "+1234567890",
+    "website": "https://example.com",
+    "category": "Restaurant",
+    "coordinates": {"lat": 40.7128, "lng": -74.0060},
+    "address": "123 Main St, City",
+    "posts": [...]
+  }
+}
+```
+
+### search_instagram_search
+
+Search Instagram for profiles, hashtags, and locations.
+
+**Request:**
+```json
+{
+  "query": "fashion",
+  "timeout": 90
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "users": [
+      {"username": "...", "full_name": "...", "followers": 50000}
+    ],
+    "hashtags": [
+      {"name": "fashion", "media_count": 1000000}
+    ],
+    "places": [
+      {"id": "123", "name": "Fashion District", "city": "NYC"}
+    ]
+  }
+}
+```
+
+---
+
+## Social Media - TikTok Parser
+
+### parse_tiktok_profile
+
+Parse TikTok profile data including videos, followers, and bio.
+
+**Request:**
+```json
+{
+  "query": "@username",
+  "timeout": 120
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "username": "username",
+    "nickname": "Display Name",
+    "bio": "Profile bio text",
+    "email": "contact@example.com",
+    "link": "https://link.com",
+    "video_count": 234,
+    "followers_count": 1500000,
+    "following_count": 123,
+    "avatar_url": "https://...",
+    "videos": [
+      {
+        "id": "video_id",
+        "caption": "Video caption",
+        "likes": 50000,
+        "comments": 1200,
+        "shares": 500,
+        "views": 2000000
+      }
+    ]
+  }
+}
+```
+
+---
+
+## Analytics Parser
+
+### get_google_trends
+
+Analyze keyword trends, interest over time, and regional data.
+
+**Request (single keyword):**
+```json
+{
+  "query": "artificial intelligence",
+  "timeout": 90
+}
+```
+
+**Request (multiple keywords comparison):**
+```json
+{
+  "query": "AI,machine learning,deep learning",
+  "timeout": 90
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "categories": [
+      {
+        "query": "artificial intelligence",
+        "category": "Science & Technology",
+        "popularity": 85
+      }
+    ],
+    "interest_over_time": [
+      {"timestamp": 1704067200, "popularity": 75},
+      {"timestamp": 1704153600, "popularity": 82},
+      {"timestamp": 1704240000, "popularity": 88}
+    ],
+    "interest_by_region": [
+      {"region": "United States", "popularity": 100},
+      {"region": "United Kingdom", "popularity": 87},
+      {"region": "Canada", "popularity": 76}
+    ],
+    "related_queries_top": [
+      {"query": "what is AI", "popularity": 100},
+      {"query": "AI applications", "popularity": 85}
+    ],
+    "related_queries_rising": [
+      {"query": "AI in 2026", "popularity": "Breakout"},
+      {"query": "generative AI", "popularity": "+350%"}
+    ]
+  }
+}
+```
+
+**Use Cases:**
+- SEO keyword research
+- Market trend analysis
+- Content planning
+- Competitive analysis
+- Regional targeting
+
+---
+
+## Visual Content Parser
+
+### search_pinterest_search
+
+High-speed Pinterest image search (4000+ queries/min).
+
+**Request:**
+```json
+{
+  "query": "modern interior design",
+  "timeout": 60
+}
+```
+
+**Response:**
+```json
+{
+  "success": 1,
+  "data": {
+    "titles": [
+      "Modern Living Room Design",
+      "Minimalist Interior Concept",
+      "Contemporary Home Decor"
+    ],
+    "descriptions": [
+      "Beautiful modern living room with clean lines...",
+      "Minimalist approach to interior design..."
+    ],
+    "image_links": [
+      "https://i.pinimg.com/originals/...",
+      "https://i.pinimg.com/736x/..."
+    ],
+    "domains": [
+      "architecturaldigest.com",
+      "houzz.com",
+      "dwell.com"
+    ],
+    "source_links": [
+      "https://architecturaldigest.com/gallery/..."
+    ],
+    "pin_ids": [
+      "123456789",
+      "987654321"
+    ],
+    "author_info": {
+      "pinners": ["user1", "user2"],
+      "boards": ["Interior Design", "Modern Homes"]
+    }
+  }
+}
+```
+
+**Features:**
+- Up to 100 pages per query
+- 4000+ queries per minute
+- Image links, titles, descriptions
+- Source domain tracking
+- Author and board information
+
+**Use Cases:**
+- Visual research and mood boards
+- Design inspiration collection
+- E-commerce product research
+- Brand visual analysis
+- Content creation planning
 
 ---
 

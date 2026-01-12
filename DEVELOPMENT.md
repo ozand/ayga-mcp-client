@@ -2,7 +2,7 @@
 
 ## Project Origin
 
-**ayga-mcp-client** (formerly redis-mcp-client) - MCP server providing unified access to Redis API with 21+ AI parsers for Claude Desktop, VS Code Copilot, and Cursor.
+**ayga-mcp-client** (formerly redis-mcp-client) - MCP server providing unified access to Redis API with 39 AI parsers across 9 categories for Claude Desktop, VS Code Copilot, and Cursor.
 
 ### Why This Project Exists
 
