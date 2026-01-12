@@ -1,4 +1,4 @@
-"""Test ayga-mcp-client v1.2.0 - verify all 29 parsers are available."""
+"""Test ayga-mcp-client v1.3.0 - verify all 39 parsers are available."""
 
 import sys
 from pathlib import Path
@@ -10,8 +10,8 @@ from ayga_mcp_client.server import PARSERS, get_parser_input_schema
 
 
 def test_parser_count():
-    """Verify we have exactly 29 parsers."""
-    assert len(PARSERS) == 29, f"Expected 29 parsers, got {len(PARSERS)}"
+    """Verify we have exactly 39 parsers."""
+    assert len(PARSERS) == 39, f"Expected 39 parsers, got {len(PARSERS)}"
     print(f"✓ Parser count: {len(PARSERS)}")
 
 
@@ -21,10 +21,15 @@ def test_parser_categories():
         "FreeAI": ["perplexity", "googleai", "chatgpt", "kimi", "deepai", "copilot"],
         "YouTube": ["youtube_video", "youtube_search", "youtube_suggest", 
                    "youtube_channel_videos", "youtube_channel_about", "youtube_comments"],
-        "Social": ["telegram_group", "reddit_posts", "reddit_post_info", "reddit_comments"],
+        "Social": ["telegram_group", "reddit_posts", "reddit_post_info", "reddit_comments",
+                  "instagram_profile", "instagram_post", "instagram_tag", "instagram_geo", 
+                  "instagram_search", "tiktok_profile"],
         "Translation": ["google_translate", "deepl_translate", "bing_translate", "yandex_translate"],
         "SE": ["google_search", "yandex_search", "bing_search", "duckduckgo_search",
                "baidu_search", "yahoo_search", "rambler_search", "you_search"],
+        "Content": ["article_extractor", "text_extractor"],
+        "Analytics": ["google_trends"],
+        "Visual": ["pinterest_search"],
         "Net": ["http"]
     }
     
@@ -53,10 +58,13 @@ def test_tool_prefixes():
         "search_": ["perplexity", "googleai", "chatgpt", "kimi", "deepai", "copilot",
                    "youtube_search", "reddit_posts", "reddit_comments",
                    "google_search", "yandex_search", "bing_search", "duckduckgo_search",
-                   "baidu_search", "yahoo_search", "rambler_search", "you_search"],
-        "parse_": ["youtube_video", "youtube_comments"],
+                   "baidu_search", "yahoo_search", "rambler_search", "you_search",
+                   "instagram_search", "pinterest_search"],
+        "parse_": ["youtube_video", "youtube_comments", 
+                  "instagram_profile", "instagram_post", "instagram_tag", "instagram_geo",
+                  "tiktok_profile", "article_extractor", "text_extractor"],
         "get_": ["youtube_suggest", "youtube_channel_videos", "youtube_channel_about", 
-                "reddit_post_info"],
+                "reddit_post_info", "google_trends"],
         "translate_": ["google_translate", "deepl_translate", "bing_translate", "yandex_translate"],
         "scrape_": ["telegram_group"],
         "fetch_": ["http"]
@@ -120,12 +128,19 @@ def test_a_parser_mapping():
     import inspect
     source = inspect.getsource(RedisAPIClient.submit_parser_task)
     
-    # Check critical mappings
+    # Check critical mappings (including new v1.3.0 parsers)
     critical_mappings = [
         ("perplexity", "FreeAI::Perplexity"),
         ("youtube_video", "SE::YouTube::Video"),
         ("telegram_group", "Telegram::GroupScraper"),
         ("google_translate", "SE::Google::Translate"),
+        ("instagram_profile", "Social::Instagram::Profile"),
+        ("instagram_post", "Social::Instagram::Post"),
+        ("tiktok_profile", "Social::TikTok::Profile"),
+        ("article_extractor", "HTML::ArticleExtractor"),
+        ("text_extractor", "HTML::TextExtractor"),
+        ("google_trends", "SE::Google::Trends"),
+        ("pinterest_search", "SE::Pinterest"),
         ("http", "Net::HTTP"),
     ]
     

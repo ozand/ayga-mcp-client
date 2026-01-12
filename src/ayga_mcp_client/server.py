@@ -127,11 +127,17 @@ PARSERS = [
     {"id": "youtube_channel_about", "name": "YouTube Channel About", "description": "Get channel info", "prefix": "get_"},
     {"id": "youtube_comments", "name": "YouTube Comments", "description": "Parse video comments", "prefix": "parse_"},
     
-    # Social Media Category (4 parsers)
+    # Social Media Category (10 parsers)
     {"id": "telegram_group", "name": "Telegram Group", "description": "Scrape public group messages", "prefix": "scrape_"},
     {"id": "reddit_posts", "name": "Reddit Posts", "description": "Search Reddit posts", "prefix": "search_"},
     {"id": "reddit_post_info", "name": "Reddit Post Info", "description": "Get post with comments", "prefix": "get_"},
     {"id": "reddit_comments", "name": "Reddit Comments", "description": "Search Reddit comments", "prefix": "search_"},
+    {"id": "instagram_profile", "name": "Instagram Profile", "description": "Parse Instagram profile data, posts, followers", "prefix": "parse_"},
+    {"id": "instagram_post", "name": "Instagram Post", "description": "Parse Instagram post with likes, comments, caption", "prefix": "parse_"},
+    {"id": "instagram_tag", "name": "Instagram Tag", "description": "Parse Instagram posts by hashtag", "prefix": "parse_"},
+    {"id": "instagram_geo", "name": "Instagram Geo", "description": "Parse Instagram posts by location", "prefix": "parse_"},
+    {"id": "instagram_search", "name": "Instagram Search", "description": "Search Instagram profiles, hashtags, locations", "prefix": "search_"},
+    {"id": "tiktok_profile", "name": "TikTok Profile", "description": "Parse TikTok profile data, videos, followers", "prefix": "parse_"},
     
     # Translation Category (4 parsers)
     {"id": "google_translate", "name": "Google Translate", "description": "Google translation service", "prefix": "translate_"},
@@ -148,6 +154,16 @@ PARSERS = [
     {"id": "yahoo_search", "name": "Yahoo Search", "description": "Parse Yahoo search results", "prefix": "search_"},
     {"id": "rambler_search", "name": "Rambler Search", "description": "Parse Russian search engine Rambler results", "prefix": "search_"},
     {"id": "you_search", "name": "You.com Search", "description": "Parse You.com AI-powered search results", "prefix": "search_"},
+    
+    # Content Category (2 parsers)
+    {"id": "article_extractor", "name": "Article Extractor", "description": "Extract articles using Mozilla Readability algorithm", "prefix": "parse_"},
+    {"id": "text_extractor", "name": "Text Extractor", "description": "Parse text blocks from web pages with HTML cleaning", "prefix": "parse_"},
+    
+    # Analytics Category (1 parser)
+    {"id": "google_trends", "name": "Google Trends", "description": "Parse trending keywords and interest data from Google Trends", "prefix": "get_"},
+    
+    # Visual Content Category (1 parser)
+    {"id": "pinterest_search", "name": "Pinterest Search", "description": "Parse Pinterest search results: images, titles, descriptions", "prefix": "search_"},
     
     # Net Category (1 parser)
     {"id": "http", "name": "HTTP Fetcher", "description": "Fetch raw URL content", "prefix": "fetch_"},

@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-01-12
+
+### Added
+- **10 new parsers** across 4 categories (29 → 39 parsers):
+  - **Content (2)**: article_extractor (Mozilla Readability), text_extractor (2000 queries/min)
+  - **Social expansion (6)**: Instagram parsers (profile, post, tag, geo, search) + TikTok profile
+  - **Analytics (1)**: google_trends (keyword trends, interest data)
+  - **Visual (1)**: pinterest_search (4000+ queries/min image search)
+
+- **39 parsers total** organized in 9 categories:
+  - **FreeAI (6)**: perplexity, googleai, chatgpt, kimi, deepai, copilot
+  - **YouTube (6)**: youtube_video, youtube_search, youtube_suggest, youtube_channel_videos, youtube_channel_about, youtube_comments
+  - **Social (10)**: telegram_group, reddit_posts, reddit_post_info, reddit_comments, instagram_profile, instagram_post, instagram_tag, instagram_geo, instagram_search, tiktok_profile
+  - **Translation (4)**: google_translate, deepl_translate, bing_translate, yandex_translate
+  - **Search Engines (8)**: google_search, yandex_search, bing_search, duckduckgo_search, baidu_search, yahoo_search, rambler_search, you_search
+  - **Content (2)**: article_extractor, text_extractor
+  - **Analytics (1)**: google_trends
+  - **Visual (1)**: pinterest_search
+  - **Net (1)**: http
+
+- **Instagram features**:
+  - Profile parsing with followers, posts, bio extraction
+  - Post parsing with up to 1200 comments
+  - Hashtag and location-based post collection
+  - Search for profiles, hashtags, locations
+  - Note: Some Instagram parsers require authentication cookies
+
+- **Content extraction features**:
+  - Article extraction using Mozilla Readability algorithm
+  - Automatic HTML tag cleaning
+  - Multi-page content parsing
+  - CloudFlare bypass support
+  - High-speed text extraction (2000 queries/min)
+
+- **Analytics features**:
+  - Google Trends keyword analysis
+  - Interest over time and by region
+  - Related queries (top and rising)
+  - Multiple keyword comparison support
+
+- **Visual content features**:
+  - Pinterest image search (4000+ queries/min)
+  - Image links, titles, descriptions
+  - Domain and author information
+  - Up to 100 pages per query
+
+### Changed
+- Total parser count: 29 → 39 (+34% increase)
+- Category count: 6 → 9
+- Updated documentation with new parser examples
+
 ## [1.2.0] - 2026-01-12
 
 ### Added

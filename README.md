@@ -1,18 +1,22 @@
 # ayga-mcp-client
 
-MCP server for Redis API with **29 parsers** across 6 categories.
+MCP server for Redis API with **39 parsers** across 9 categories.
 
 <!-- MCP Registry identifier -->
 mcp-name: io.github.ozand/ayga-mcp-client
 
-## ✨ What's New in v1.2.0
+## ✨ What's New in v1.3.0
 
-- **29 parsers total** (was 21): Added Search Engine category
+- **39 parsers total** (was 29): Added Content, Social expansion, Analytics, and Visual categories
+- **+10 parsers**: Instagram (6), Content (2), Analytics (1), Visual (1)
+- **Content** (2): Article extractor, text extractor with HTML cleaning
+- **Social media** (10): Instagram (5), TikTok (1), Telegram, Reddit (3)
+- **Analytics** (1): Google Trends for keyword research
+- **Visual** (1): Pinterest search for images
 - **Search Engines** (8): Google, Yandex, Bing, DuckDuckGo, Baidu, Yahoo, Rambler, You.com
 - **FreeAI** (6): Perplexity, GoogleAI, ChatGPT, Kimi, DeepAI, Copilot
 - **YouTube** (6): Video metadata, search, suggestions, channel info, comments
 - **Translation** (4): Google, DeepL, Bing, Yandex with language control
-- **Social media** (4): Telegram groups, Reddit posts/comments
 - **Net** (1): HTTP fetcher
 
 ## Quick Start
@@ -82,11 +86,17 @@ Add to your MCP config file (`%APPDATA%\Code\User\mcp.json` on Windows):
 - `get_youtube_channel_about` - Channel info from About page
 - `parse_youtube_comments` - Parse video comments with threading
 
-### Social Media Parsers (4)
+### Social Media Parsers (10)
 - `scrape_telegram_group` - Scrape public group messages
-- `search_reddit_posts` - Search Reddit posts
-- `get_reddit_post_info` - Get post with comments
+- `search_reddit_posts` - Search Reddit posts with sorting
+- `get_reddit_post_info` - Get post with comments and details
 - `search_reddit_comments` - Search Reddit comments
+- `parse_instagram_profile` - Profile data, posts, followers (requires auth cookie)
+- `parse_instagram_post` - Post with likes, comments, caption
+- `parse_instagram_tag` - Posts by hashtag (requires auth cookie)
+- `parse_instagram_geo` - Posts by location with coordinates
+- `search_instagram_search` - Search profiles, hashtags, locations
+- `parse_tiktok_profile` - TikTok profile data, videos, followers
 
 ### Translation Services (4)
 - `translate_google_translate` - Google Translate (100+ languages)
@@ -98,13 +108,25 @@ Add to your MCP config file (`%APPDATA%\Code\User\mcp.json` on Windows):
 - `search_google_search` - Google search with operators support
 - `search_yandex_search` - Yandex search (Russian search engine)
 - `search_bing_search` - Bing search with operators support
-- `search_duckduckgo_search` - DuckDuckGo privacy-focused search
-- `search_baidu_search` - Baidu search (Chinese search engine)
+- `search_duckduckgo_search` - Privacy-focused DuckDuckGo search
+- `search_baidu_search` - Chinese search engine Baidu
 - `search_yahoo_search` - Yahoo search results
-- `search_rambler_search` - Rambler search (Russian)
+- `search_rambler_search` - Russian search engine Rambler
 - `search_you_search` - You.com AI-powered search
 
-### Net Parsers (1)
+### Content Parsers (2)
+- `parse_article_extractor` - Extract articles with Mozilla Readability algorithm
+- `parse_text_extractor` - Parse text blocks with automatic HTML cleaning (2000 queries/min)
+
+### Analytics Parsers (1)
+- `get_google_trends` - Parse trending keywords, interest data, regional trends
+
+### Visual Content Parsers (1)
+- `search_pinterest_search` - Pinterest images, titles, descriptions (4000+ queries/min)
+
+### Net Tools (1)
+- `fetch_http` - Fetch raw URL content
+### Net Tools (1)
 - `fetch_http` - Fetch raw URL content
 
 ### Metadata Tools
@@ -131,18 +153,33 @@ Once configured, use tools in Claude Desktop or VS Code Copilot:
 @ayga parse_youtube_video query="https://youtube.com/watch?v=..." preset="default"
 @ayga search_youtube_search query="python tutorial" pages_count=2
 
+# Instagram/TikTok (Social Media)
+@ayga parse_instagram_profile query="username" timeout=120
+@ayga parse_instagram_tag query="travel" timeout=120
+@ayga parse_tiktok_profile query="@username"
+
 # Translation with language control
 @ayga translate_google_translate query="Hello world" from_language="en" to_language="ru"
 @ayga translate_deepl_translate query="Machine learning" to_language="de"
 
-# Social media scraping
+# Content extraction
+@ayga parse_article_extractor query="https://example.com/article"
+@ayga parse_text_extractor query="https://example.com/page"
+
+# Analytics and trends
+@ayga get_google_trends query="artificial intelligence" timeout=90
+@ayga get_google_trends query="AI,machine learning,deep learning"
+
+# Visual content
+@ayga search_pinterest_search query="modern interior design" timeout=60
+
+# Social media
+@ayga parse_instagram_profile query="username" timeout=120
 @ayga search_reddit_posts query="python" pages_count=1 sort="top"
-@ayga scrape_telegram_group query="https://t.me/publicgroup"
 
 # Search engines
 @ayga search_google_search query="site:github.com python parser"
 @ayga search_yandex_search query="программирование python"
-@ayga search_duckduckgo_search query="privacy tools"
 
 # Metadata
 @ayga list_parsers

@@ -99,9 +99,9 @@ class RedisAPIClient:
         # Generate task ID
         task_id = str(uuid.uuid4())
         
-        # Map parser_id to A-Parser format (29 parsers: 6 FreeAI + 6 YouTube + 4 Social + 4 Translation + 8 SE + 1 Net)
+        # Map parser_id to A-Parser format (39 parsers: 6 FreeAI + 6 YouTube + 10 Social + 4 Translation + 8 SE + 2 Content + 1 Analytics + 1 Visual + 1 Net)
         parser_map = {
-            # FreeAI Category
+            # FreeAI Category (6)
             "perplexity": "FreeAI::Perplexity",
             "googleai": "FreeAI::GoogleAI",
             "chatgpt": "FreeAI::ChatGPT",
@@ -109,7 +109,7 @@ class RedisAPIClient:
             "deepai": "FreeAI::DeepAI",
             "copilot": "FreeAI::Copilot",
             
-            # YouTube Category
+            # YouTube Category (6)
             "youtube_video": "SE::YouTube::Video",
             "youtube_search": "SE::YouTube",
             "youtube_suggest": "SE::YouTube::Suggest",
@@ -117,19 +117,25 @@ class RedisAPIClient:
             "youtube_channel_about": "Net::HTTP",
             "youtube_comments": "JS::Example::Youtube::Comments",
             
-            # Social Media Category
+            # Social Media Category (10)
             "telegram_group": "Telegram::GroupScraper",
             "reddit_posts": "Reddit::Posts",
             "reddit_post_info": "Reddit::PostInfo",
             "reddit_comments": "Reddit::Comments",
+            "instagram_profile": "Social::Instagram::Profile",
+            "instagram_post": "Social::Instagram::Post",
+            "instagram_tag": "Social::Instagram::Tag",
+            "instagram_geo": "Social::Instagram::Geo",
+            "instagram_search": "Social::Instagram::Search",
+            "tiktok_profile": "Social::TikTok::Profile",
             
-            # Translation Category
+            # Translation Category (4)
             "google_translate": "SE::Google::Translate",
             "deepl_translate": "DeepL::Translator",
             "bing_translate": "SE::Bing::Translator",
             "yandex_translate": "SE::Yandex::Translate",
             
-            # Search Engine Category
+            # Search Engine Category (8)
             "google_search": "SE::Google",
             "yandex_search": "SE::Yandex",
             "bing_search": "SE::Bing",
@@ -139,7 +145,17 @@ class RedisAPIClient:
             "rambler_search": "SE::Rambler",
             "you_search": "SE::You",
             
-            # Net Category
+            # Content Category (2)
+            "article_extractor": "HTML::ArticleExtractor",
+            "text_extractor": "HTML::TextExtractor",
+            
+            # Analytics Category (1)
+            "google_trends": "SE::Google::Trends",
+            
+            # Visual Content Category (1)
+            "pinterest_search": "SE::Pinterest",
+            
+            # Net Category (1)
             "http": "Net::HTTP",
         }
         
