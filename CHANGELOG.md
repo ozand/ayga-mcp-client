@@ -5,6 +5,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.4.0] - 2026-01-12
+
+### Fixed
+- **Critical timeout issue** - Heavy parsers (GoogleAI, Google Search, Translate, Trends) were timing out before results were ready
+- Increased default timeouts based on parser category:
+  - **Fast parsers (60s)**: Perplexity, ChatGPT, DeepAI, YouTube Suggest, Reddit, etc.
+  - **Medium parsers (120s)**: YouTube Search/Video, Pinterest, Article Extractor
+  - **Slow parsers (180s)**: GoogleAI, Google Search/Translate/Trends, DeepL, Bing, all Instagram/TikTok
+
+### Changed
+- **Improved exponential backoff** in `wait_for_result()`:
+  - Start delay: 1.0s → 1.5s (give A-Parser initial processing time)
+  - Max delay: 3.0s → 5.0s (reduce Redis polling frequency)
+  - Better backoff curve: 1.5s → 1.8s → 2.2s → 2.6s → 3.1s → 3.7s → 4.5s → 5s
+- Default timeout in `wait_for_result()`: 90s → 180s
+- Tool descriptions now show parser-specific default timeouts
+
+### Added
+- `PARSER_TIMEOUT_CATEGORIES` - Parser categorization by expected processing time
+- `get_default_timeout(parser_id)` - Get appropriate timeout for each parser
+
 ## [1.3.0] - 2026-01-12
 
 ### Added

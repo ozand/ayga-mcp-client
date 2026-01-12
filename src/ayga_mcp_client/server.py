@@ -11,9 +11,47 @@ from .api.client import RedisAPIClient
 from .error_handler import ErrorHandler, create_timeout_error, create_rate_limit_error
 
 
+# Parser timeout categories based on A-Parser processing time
+PARSER_TIMEOUT_CATEGORIES = {
+    # Fast parsers (10-30 seconds)
+    "fast": {
+        "default": 60,
+        "parsers": ["perplexity", "chatgpt", "deepai", "kimi", "copilot",
+                    "youtube_suggest", "reddit_posts", "reddit_post_info", "reddit_comments",
+                    "text_extractor", "http"]
+    },
+    # Medium parsers (30-60 seconds)
+    "medium": {
+        "default": 120,
+        "parsers": ["youtube_search", "youtube_video", "youtube_channel_videos",
+                    "youtube_channel_about", "pinterest_search", "article_extractor"]
+    },
+    # Slow parsers (60-120+ seconds)
+    "slow": {
+        "default": 180,
+        "parsers": ["googleai", "google_search", "google_translate", "google_trends",
+                    "deepl_translate", "bing_translate", "yandex_translate",
+                    "bing_search", "yandex_search", "duckduckgo_search", "baidu_search",
+                    "yahoo_search", "rambler_search", "you_search",
+                    "youtube_comments", "telegram_group",
+                    "instagram_profile", "instagram_post", "instagram_tag",
+                    "instagram_geo", "instagram_search", "tiktok_profile"]
+    }
+}
+
+
+def get_default_timeout(parser_id: str) -> int:
+    """Get default timeout for a parser based on its category."""
+    for category, config in PARSER_TIMEOUT_CATEGORIES.items():
+        if parser_id in config["parsers"]:
+            return config["default"]
+    return 120  # Default for unknown parsers
+
+
 def get_parser_input_schema(parser: Dict[str, Any]) -> Dict[str, Any]:
     """Generate input schema based on parser category."""
     parser_id = parser['id']
+    default_timeout = get_default_timeout(parser_id)
     
     # Base schema (all parsers)
     schema = {
@@ -26,7 +64,7 @@ def get_parser_input_schema(parser: Dict[str, Any]) -> Dict[str, Any]:
             "timeout": {
                 "type": "integer",
                 "description": "Maximum wait time in seconds",
-                "default": 90
+                "default": default_timeout
             },
             "preset": {
                 "type": "string",
@@ -194,9 +232,10 @@ def create_mcp_server(
         # Add parser tools
         for parser in PARSERS:
             tool_name = f"{parser['prefix']}{parser['id']}"
+            default_timeout = get_default_timeout(parser['id'])
             tools.append(Tool(
                 name=tool_name,
-                description=f"{parser['description']}. Args: query (string), timeout (int, default 90)",
+                description=f"{parser['description']}. Args: query (string), timeout (int, default {default_timeout})",
                 inputSchema=get_parser_input_schema(parser)
             ))
         
@@ -282,7 +321,8 @@ def create_mcp_server(
         if parser:
             parser_id = parser['id']
             query = arguments.get("query")
-            timeout = arguments.get("timeout", 90)
+            default_timeout = get_default_timeout(parser_id)
+            timeout = arguments.get("timeout", default_timeout)
             
             if not query:
                 return [TextContent(

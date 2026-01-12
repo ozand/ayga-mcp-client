@@ -273,12 +273,31 @@ class RedisAPIClient:
     async def wait_for_result(
         self,
         task_id: str,
-        timeout: int = 90,
+        timeout: int = 180,
         progress_callback: Optional[Callable[[float], None]] = None,
     ) -> Dict[str, Any]:
-        """Poll for task result with progressive backoff."""
+        """Poll for task result with exponential backoff.
+        
+        Uses progressive polling strategy:
+        - Start with 1.5s delay
+        - Increase by 20% each poll (exponential backoff)
+        - Cap at 5s maximum delay
+        - Total timeout default 180s for slow parsers
+        
+        Args:
+            task_id: Task ID from submit_parser_task
+            timeout: Maximum wait time in seconds (default: 180)
+            progress_callback: Optional callback for progress updates
+            
+        Returns:
+            Dict with parsed result
+            
+        Raises:
+            TimeoutError: If result not ready within timeout
+        """
         start = asyncio.get_event_loop().time()
-        delay = 1.0
+        delay = 1.5  # Start with 1.5s (A-Parser needs time to process)
+        max_delay = 5.0  # Cap at 5s between polls
         
         while True:
             elapsed = asyncio.get_event_loop().time() - start
@@ -294,9 +313,9 @@ class RedisAPIClient:
             if progress_callback:
                 progress_callback(min(elapsed / timeout, 0.95))
             
-            # Progressive backoff: 1s, 1.5s, 2s, 2.5s, max 3s
+            # Exponential backoff: 1.5s, 1.8s, 2.2s, 2.6s, 3.1s, 3.7s, 4.5s, 5s, 5s...
             await asyncio.sleep(delay)
-            delay = min(delay * 1.2, 3.0)
+            delay = min(delay * 1.2, max_delay)
     
     async def close(self):
         """Close HTTP client."""
