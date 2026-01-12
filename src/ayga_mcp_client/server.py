@@ -144,6 +144,39 @@ def get_parser_input_schema(parser: Dict[str, Any]) -> Dict[str, Any]:
             "default": 100
         }
     
+    # Google Trends - add category, region, time period parameters
+    elif parser_id == "google_trends":
+        schema["properties"]["category"] = {
+            "type": "string",
+            "description": "Category ID: 0=All, 3=Arts, 5=Computers, 7=Finance, 12=Business, 13=Health, 16=News, 22=Shopping, 174=Sports",
+            "default": "0"
+        }
+        schema["properties"]["region"] = {
+            "type": "string", 
+            "description": "Country code (ISO 3166-1): '' (Worldwide), US, GB, DE, FR, RU, JP, CN, etc.",
+            "default": ""
+        }
+        schema["properties"]["time_period"] = {
+            "type": "string",
+            "description": "Time period: 'today 5-y', 'today 12-m', 'today 3-m', 'today 1-m', 'now 7-d', 'now 1-d', 'now 1-H'",
+            "default": "today 5-y"
+        }
+        schema["properties"]["language"] = {
+            "type": "string",
+            "description": "Interface language code: en, ru, de, fr, es, ja, etc.",
+            "default": "en"
+        }
+        schema["properties"]["property"] = {
+            "type": "string",
+            "description": "Search property: '' (Web), 'images', 'news', 'froogle' (Shopping), 'youtube'",
+            "default": ""
+        }
+        schema["properties"]["use_empty_queries"] = {
+            "type": "boolean",
+            "description": "Get category trending without keywords (query should be language code)",
+            "default": False
+        }
+    
     return schema
 
 

@@ -190,6 +190,20 @@ class RedisAPIClient:
                 aparser_options["commentsPages"] = options["comments_pages"]
             if "sort" in options:
                 aparser_options["sort"] = options["sort"]
+            
+            # Google Trends parameters
+            if "category" in options:
+                aparser_options["search_category"] = options["category"]
+            if "region" in options:
+                aparser_options["search_region"] = options["region"]
+            if "time_period" in options:
+                aparser_options["search_time"] = options["time_period"]
+            if "language" in options:
+                aparser_options["hl"] = options["language"]
+            if "property" in options:
+                aparser_options["search_property"] = options["property"]
+            if "use_empty_queries" in options:
+                aparser_options["use_empty_queries"] = options["use_empty_queries"]
         
         # A-Parser task format: [taskId, parser, preset, query, options, {}]
         task_data = [task_id, aparser_name, preset, query, aparser_options, {}]
