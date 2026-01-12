@@ -1,18 +1,19 @@
 # ayga-mcp-client
 
-MCP server for Redis API with **21 AI parsers** across 5 categories.
+MCP server for Redis API with **29 parsers** across 6 categories.
 
 <!-- MCP Registry identifier -->
 mcp-name: io.github.ozand/ayga-mcp-client
 
-## ✨ What's New in v1.1.0
+## ✨ What's New in v1.2.0
 
-- **21 parsers total** (was 11): Full sync with redis_wrapper
-- **YouTube parsers** (6): Video metadata, search, suggestions, channel info, comments
-- **Translation services** (4): Google, DeepL, Bing, Yandex with language control
+- **29 parsers total** (was 21): Added Search Engine category
+- **Search Engines** (8): Google, Yandex, Bing, DuckDuckGo, Baidu, Yahoo, Rambler, You.com
+- **FreeAI** (6): Perplexity, GoogleAI, ChatGPT, Kimi, DeepAI, Copilot
+- **YouTube** (6): Video metadata, search, suggestions, channel info, comments
+- **Translation** (4): Google, DeepL, Bing, Yandex with language control
 - **Social media** (4): Telegram groups, Reddit posts/comments
-- **Extended parameters**: Presets, languages, pagination, sorting
-- **Correct tool naming**: `search_*`, `parse_*`, `translate_*`, `get_*`, `scrape_*`, `fetch_*`
+- **Net** (1): HTTP fetcher
 
 ## Quick Start
 
@@ -93,6 +94,16 @@ Add to your MCP config file (`%APPDATA%\Code\User\mcp.json` on Windows):
 - `translate_bing_translate` - Microsoft Bing Translator
 - `translate_yandex_translate` - Yandex Translate with captcha bypass
 
+### Search Engines (8)
+- `search_google_search` - Google search with operators support
+- `search_yandex_search` - Yandex search (Russian search engine)
+- `search_bing_search` - Bing search with operators support
+- `search_duckduckgo_search` - DuckDuckGo privacy-focused search
+- `search_baidu_search` - Baidu search (Chinese search engine)
+- `search_yahoo_search` - Yahoo search results
+- `search_rambler_search` - Rambler search (Russian)
+- `search_you_search` - You.com AI-powered search
+
 ### Net Parsers (1)
 - `fetch_http` - Fetch raw URL content
 
@@ -127,6 +138,11 @@ Once configured, use tools in Claude Desktop or VS Code Copilot:
 # Social media scraping
 @ayga search_reddit_posts query="python" pages_count=1 sort="top"
 @ayga scrape_telegram_group query="https://t.me/publicgroup"
+
+# Search engines
+@ayga search_google_search query="site:github.com python parser"
+@ayga search_yandex_search query="программирование python"
+@ayga search_duckduckgo_search query="privacy tools"
 
 # Metadata
 @ayga list_parsers

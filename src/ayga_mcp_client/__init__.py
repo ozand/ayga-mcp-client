@@ -1,6 +1,6 @@
 """Redis MCP Client - MCP server for Redis API."""
 
-__version__ = "1.1.0"
+__version__ = "1.2.0"
 
 from .server import create_mcp_server, run_stdio_server
 from .api.client import RedisAPIClient

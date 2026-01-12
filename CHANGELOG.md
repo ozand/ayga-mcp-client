@@ -5,6 +5,28 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-01-12
+
+### Added
+- **8 Search Engine parsers**: Google, Yandex, Bing, DuckDuckGo, Baidu, Yahoo, Rambler, You.com
+- **29 parsers total** (was 21) - new SE category:
+  - **FreeAI (6)**: perplexity, googleai, chatgpt, kimi, deepai, copilot
+  - **YouTube (6)**: youtube_video, youtube_search, youtube_suggest, youtube_channel_videos, youtube_channel_about, youtube_comments
+  - **Social (4)**: telegram_group, reddit_posts, reddit_post_info, reddit_comments
+  - **Translation (4)**: google_translate, deepl_translate, bing_translate, yandex_translate
+  - **Search Engines (8)**: google_search, yandex_search, bing_search, duckduckgo_search, baidu_search, yahoo_search, rambler_search, you_search
+  - **Net (1)**: http (URL fetcher)
+
+- **Search Engine features**:
+  - Support for all search operators (site:, inurl:, intitle:, etc.)
+  - High-performance parsing (up to 7000 queries/min for Google/Yandex)
+  - Related keywords, ads, snippets collection
+  - Multi-language support
+
+### Changed
+- Total parser count: 21 → 29
+- Updated documentation with Search Engine examples
+
 ## [1.1.0] - 2026-01-12
 
 ### Changed

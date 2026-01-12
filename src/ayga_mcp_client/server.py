@@ -139,6 +139,16 @@ PARSERS = [
     {"id": "bing_translate", "name": "Bing Translate", "description": "Microsoft Bing translator", "prefix": "translate_"},
     {"id": "yandex_translate", "name": "Yandex Translate", "description": "Yandex translator with captcha bypass", "prefix": "translate_"},
     
+    # Search Engine Category (8 parsers)
+    {"id": "google_search", "name": "Google Search", "description": "Parse Google search results with operators support", "prefix": "search_"},
+    {"id": "yandex_search", "name": "Yandex Search", "description": "Parse Yandex search results (Russian search engine)", "prefix": "search_"},
+    {"id": "bing_search", "name": "Bing Search", "description": "Parse Bing search results with operators support", "prefix": "search_"},
+    {"id": "duckduckgo_search", "name": "DuckDuckGo Search", "description": "Privacy-focused search engine results", "prefix": "search_"},
+    {"id": "baidu_search", "name": "Baidu Search", "description": "Parse Chinese search engine Baidu results", "prefix": "search_"},
+    {"id": "yahoo_search", "name": "Yahoo Search", "description": "Parse Yahoo search results", "prefix": "search_"},
+    {"id": "rambler_search", "name": "Rambler Search", "description": "Parse Russian search engine Rambler results", "prefix": "search_"},
+    {"id": "you_search", "name": "You.com Search", "description": "Parse You.com AI-powered search results", "prefix": "search_"},
+    
     # Net Category (1 parser)
     {"id": "http", "name": "HTTP Fetcher", "description": "Fetch raw URL content", "prefix": "fetch_"},
 ]

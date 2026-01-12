@@ -1,4 +1,4 @@
-"""Test ayga-mcp-client v1.1.0 - verify all 21 parsers are available."""
+"""Test ayga-mcp-client v1.2.0 - verify all 29 parsers are available."""
 
 import sys
 from pathlib import Path
@@ -10,8 +10,8 @@ from ayga_mcp_client.server import PARSERS, get_parser_input_schema
 
 
 def test_parser_count():
-    """Verify we have exactly 21 parsers."""
-    assert len(PARSERS) == 21, f"Expected 21 parsers, got {len(PARSERS)}"
+    """Verify we have exactly 29 parsers."""
+    assert len(PARSERS) == 29, f"Expected 29 parsers, got {len(PARSERS)}"
     print(f"✓ Parser count: {len(PARSERS)}")
 
 
@@ -23,6 +23,8 @@ def test_parser_categories():
                    "youtube_channel_videos", "youtube_channel_about", "youtube_comments"],
         "Social": ["telegram_group", "reddit_posts", "reddit_post_info", "reddit_comments"],
         "Translation": ["google_translate", "deepl_translate", "bing_translate", "yandex_translate"],
+        "SE": ["google_search", "yandex_search", "bing_search", "duckduckgo_search",
+               "baidu_search", "yahoo_search", "rambler_search", "you_search"],
         "Net": ["http"]
     }
     
@@ -49,7 +51,9 @@ def test_tool_prefixes():
     """Verify tool prefixes are correct."""
     prefix_map = {
         "search_": ["perplexity", "googleai", "chatgpt", "kimi", "deepai", "copilot",
-                   "youtube_search", "reddit_posts", "reddit_comments"],
+                   "youtube_search", "reddit_posts", "reddit_comments",
+                   "google_search", "yandex_search", "bing_search", "duckduckgo_search",
+                   "baidu_search", "yahoo_search", "rambler_search", "you_search"],
         "parse_": ["youtube_video", "youtube_comments"],
         "get_": ["youtube_suggest", "youtube_channel_videos", "youtube_channel_about", 
                 "reddit_post_info"],
@@ -143,7 +147,7 @@ def run_all_tests():
         test_a_parser_mapping,
     ]
     
-    print("\n=== Testing ayga-mcp-client v1.1.0 ===\n")
+    print("\n=== Testing ayga-mcp-client v1.2.0 ===\n")
     
     passed = 0
     failed = 0
@@ -164,7 +168,7 @@ def run_all_tests():
     print(f"Failed: {failed}/{len(tests)}")
     
     if failed == 0:
-        print("\n✅ All tests passed! ayga-mcp-client v1.1.0 is ready.")
+        print("\n✅ All tests passed! ayga-mcp-client v1.2.0 is ready.")
         return 0
     else:
         print(f"\n❌ {failed} test(s) failed.")
