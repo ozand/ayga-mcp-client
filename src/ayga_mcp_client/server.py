@@ -24,7 +24,8 @@ PARSER_TIMEOUT_CATEGORIES = {
     "medium": {
         "default": 120,
         "parsers": ["youtube_search", "youtube_video", "youtube_channel_videos",
-                    "youtube_channel_about", "pinterest_search", "article_extractor"]
+                    "youtube_channel_about", "pinterest_search", "article_extractor",
+                    "link_extractor"]
     },
     # Slow parsers (60-120+ seconds)
     "slow": {
@@ -177,6 +178,11 @@ def get_parser_input_schema(parser: Dict[str, Any]) -> Dict[str, Any]:
             "default": False
         }
     
+    # Link Extractor - add preset enum
+    elif parser_id == "link_extractor":
+        schema["properties"]["preset"]["enum"] = ["default", "deep_crawl", "all_links"]
+        schema["properties"]["preset"]["description"] = "Preset: 'default' (single page, internal only), 'deep_crawl' (multi-level crawl), 'all_links' (internal + external)"
+    
     return schema
 
 
@@ -226,9 +232,10 @@ PARSERS = [
     {"id": "rambler_search", "name": "Rambler Search", "description": "Parse Russian search engine Rambler results", "prefix": "search_"},
     {"id": "you_search", "name": "You.com Search", "description": "Parse You.com AI-powered search results", "prefix": "search_"},
     
-    # Content Category (2 parsers)
+    # Content Category (3 parsers)
     {"id": "article_extractor", "name": "Article Extractor", "description": "Extract articles using Mozilla Readability algorithm", "prefix": "parse_"},
     {"id": "text_extractor", "name": "Text Extractor", "description": "Parse text blocks from web pages with HTML cleaning", "prefix": "parse_"},
+    {"id": "link_extractor", "name": "Link Extractor", "description": "Extract all links from HTML pages with filtering and deduplication", "prefix": "extract_"},
     
     # Analytics Category (1 parser)
     {"id": "google_trends", "name": "Google Trends", "description": "Parse trending keywords and interest data from Google Trends", "prefix": "get_"},

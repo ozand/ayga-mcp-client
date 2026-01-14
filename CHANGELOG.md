@@ -5,7 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.4.0] - 2026-01-12
+## [1.4.0] - 2026-01-14
+
+### Added
+- **Link Extractor parser** for domain scraping workflows:
+  - `extract_link_extractor` - Extract all links from HTML pages
+  - Multi-level crawling support (depth 1-5)
+  - Internal/external link filtering
+  - Automatic deduplication
+  - 3 presets: `default` (single page, internal only), `deep_crawl` (multi-level), `all_links` (internal + external)
+  - Optimized for Agent Orchestration pattern
+- **40 parsers total** (was 39)
+- **Content category**: 3 parsers (was 2) - Article, Text, Link Extractors
+
+### Changed
+- Updated parser count in README and documentation
+- Added link_extractor to medium timeout category (120s default)
+- Enhanced input schema for link_extractor with preset enum validation
+
+### Documentation
+- Added domain scraping workflow examples
+- Updated README with v1.4.0 features
+- Added Agent Orchestration usage patterns
+
+## [1.3.1] - 2026-01-12
 
 ### Fixed
 - **Critical timeout issue** - Heavy parsers (GoogleAI, Google Search, Translate, Trends) were timing out before results were ready

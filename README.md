@@ -1,16 +1,22 @@
 # ayga-mcp-client
 
-MCP server for Redis API with **39 parsers** across 9 categories.
+MCP server for Redis API with **40 parsers** across 9 categories.
 
 <!-- MCP Registry identifier -->
 mcp-name: io.github.ozand/ayga-mcp-client
 
-## ✨ What's New in v1.3.0
+## ✨ What's New in v1.4.0
 
-- **39 parsers total** (was 29): Added Content, Social expansion, Analytics, and Visual categories
-- **+10 parsers**: Instagram (6), Content (2), Analytics (1), Visual (1)
-- **Content** (2): Article extractor, text extractor with HTML cleaning
-- **Social media** (10): Instagram (5), TikTok (1), Telegram, Reddit (3)
+- **40 parsers total** (was 39): Added Link Extractor for domain scraping workflows
+- **+1 parser**: Link Extractor with multi-level crawling and filtering
+- **Content** (3): Article extractor, Text extractor, Link extractor (NEW)
+- **Link Extractor features**:
+  - Multi-level crawling (depth 1-5)
+  - Internal/external link filtering
+  - Automatic deduplication
+  - 3 presets: default, deep_crawl, all_links
+- **Agent Orchestration**: Optimized for AI agents to orchestrate domain content scraping
+- **Social media** (10): Instagram (6), TikTok (1), Telegram, Reddit (3)
 - **Analytics** (1): Google Trends for keyword research
 - **Visual** (1): Pinterest search for images
 - **Search Engines** (8): Google, Yandex, Bing, DuckDuckGo, Baidu, Yahoo, Rambler, You.com
@@ -114,9 +120,10 @@ Add to your MCP config file (`%APPDATA%\Code\User\mcp.json` on Windows):
 - `search_rambler_search` - Russian search engine Rambler
 - `search_you_search` - You.com AI-powered search
 
-### Content Parsers (2)
+### Content Parsers (3)
 - `parse_article_extractor` - Extract articles with Mozilla Readability algorithm
 - `parse_text_extractor` - Parse text blocks with automatic HTML cleaning (2000 queries/min)
+- `extract_link_extractor` - Extract all links from HTML pages with filtering and deduplication ✨ *NEW*
 
 ### Analytics Parsers (1)
 - `get_google_trends` - Parse trending keywords, interest data, regional trends
