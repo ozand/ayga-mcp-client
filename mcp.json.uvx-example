@@ -1,0 +1,20 @@
+{
+  "inputs": [
+    {
+      "id": "REDIS_API_KEY",
+      "type": "promptString",
+      "description": "ayga-mcp-client Redis API key",
+      "password": true
+    }
+  ],
+  "servers": {
+    "ayga": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["ayga-mcp-client==1.4.1"],
+      "env": {
+        "REDIS_API_KEY": "${input:REDIS_API_KEY}"
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "ayga": {
+      "type": "stdio",
+      "command": "C:\\Users\\ozand\\.mcp\\ayga-venv\\Scripts\\python.exe",
+      "args": ["-m", "ayga_mcp_client"],
+      "env": {
+        "REDIS_API_KEY": "YOUR_API_KEY_HERE"
+      }
+    }
+  }
+}

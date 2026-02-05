@@ -99,7 +99,7 @@ class RedisAPIClient:
         # Generate task ID
         task_id = str(uuid.uuid4())
         
-        # Map parser_id to A-Parser format (39 parsers: 6 FreeAI + 6 YouTube + 10 Social + 4 Translation + 8 SE + 2 Content + 1 Analytics + 1 Visual + 1 Net)
+        # Map parser_id to A-Parser format (40 parsers: 6 FreeAI + 6 YouTube + 10 Social + 4 Translation + 8 SE + 3 Content + 1 Analytics + 1 Visual + 1 Net)
         parser_map = {
             # FreeAI Category (6)
             "perplexity": "FreeAI::Perplexity",
@@ -145,9 +145,10 @@ class RedisAPIClient:
             "rambler_search": "SE::Rambler",
             "you_search": "SE::You",
             
-            # Content Category (2)
+            # Content Category (3)
             "article_extractor": "HTML::ArticleExtractor",
             "text_extractor": "HTML::TextExtractor",
+            "link_extractor": "HTML::LinkExtractor",
             
             # Analytics Category (1)
             "google_trends": "SE::Google::Trends",
